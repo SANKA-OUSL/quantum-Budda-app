@@ -16,37 +16,75 @@
     <link rel="stylesheet" href="css/mystical-theme.css">
 
     <style>
+        /* 1. ලොගින් පේජ් එක සඳහා Mobile Fixes */
         @media screen and (max-width: 600px) {
-            /* ලොගින් කාඩ් එකේ පළල වෙනස් කිරීම */
             .login-box {
                 width: 90% !important;
                 padding: 20px !important;
                 margin: 10px !important;
             }
-
-            /* ප්‍රධාන මාතෘකාවේ අකුරු කුඩා කිරීම */
             .login-title {
                 font-size: 1.5rem !important;
                 letter-spacing: 0.1em !important;
             }
-
-            /* Input කොටු වල පරතරය හැදීම */
             .login-input-group {
                 margin-bottom: 20px !important;
             }
-
-            /* ලොගින් බොත්තම සහ අනෙක් දේවල් අතර පරතරය */
             .login-options {
                 flex-direction: column;
                 align-items: flex-start !important;
                 gap: 10px;
                 font-size: 0.8rem;
             }
-
-            /* අර කැරකෙන ධර්ම චක්‍රය සහ ඇටම් එක ෆෝන් එකේදී පොඩ්ඩක් කුඩා කිරීම */
             .animated-dharma-wheel, .animated-einstein-atom {
                 font-size: 3rem !important;
-                opacity: 0.3; /* පසුබිම වැඩිය තදින් පේන්න ඕනේ නැති නිසා */
+                opacity: 0.3;
+            }
+        }
+
+        /* 2. ප්‍රධාන ඩෑෂ්බෝඩ් එක සඳහා Mobile Fixes (අලුතින් එකතු කළ කොටස) */
+        @media screen and (max-width: 768px) {
+            #main-app {
+                flex-direction: column !important; /* Sidebar සහ Content එක උඩයි යටයි වැටෙන ලෙස */
+            }
+
+            aside {
+                width: 100% !important; /* Sidebar එක මුළු පළලම ගනී */
+                height: auto !important;
+                max-height: 40vh !important; /* ලැයිස්තුව ගොඩක් දිග වුණොත් scroll වෙන්න */
+                border-right: none !important;
+                border-bottom: 1px solid #1e293b !important;
+            }
+
+            main {
+                width: 100% !important;
+                height: 60vh !important; /* ඉතිරි ඉඩ Dashboard එකට */
+            }
+
+            header {
+                height: 65px !important;
+                padding: 0 15px !important;
+            }
+
+            #header-title {
+                font-size: 0.9rem !important;
+            }
+
+            .btn-icon {
+                width: 40px !important;
+                height: 40px !important;
+            }
+
+            /* Guru බොත්තම ෆෝන් එකේදී අයිනටම ගැනීම */
+            #guru-container {
+                bottom: 15px !important;
+                right: 15px !important;
+            }
+
+            #guru-chat-window {
+                width: 92vw !important;
+                right: 0 !important;
+                margin-right: 15px;
             }
         }
     </style>
@@ -54,78 +92,43 @@
 <body class="bg-theme overflow-hidden transition-colors duration-500">
 
     <div id="new-login-page" class="new-login-full-screen">
-        <div class="animation-container-left">
-            <i class="fas fa-dharmachakra animated-dharma-wheel"></i>
-        </div>
-        <div class="animation-container-right">
-            <i class="fas fa-atom animated-einstein-atom"></i>
-        </div>
+        <div class="animation-container-left"><i class="fas fa-dharmachakra animated-dharma-wheel"></i></div>
+        <div class="animation-container-right"><i class="fas fa-atom animated-einstein-atom"></i></div>
 
         <div id="login-card" class="login-box fade-in">
             <h2 class="login-title gradient-text uppercase tracking-widest">Reality Matrix</h2>
             <h3 class="login-subtitle text-xs text-slate-400 uppercase tracking-widest">Login</h3>
-            
             <form onsubmit="handleNewLogin(event)">
-                <div class="login-input-group">
-                    <input type="email" id="login-email" required>
-                    <label>Email Address</label>
-                </div>
-                
-                <div class="login-input-group">
-                    <input type="password" id="login-password" required>
-                    <label>Password</label>
-                </div>
-                
+                <div class="login-input-group"><input type="email" id="login-email" required><label>Email Address</label></div>
+                <div class="login-input-group"><input type="password" id="login-password" required><label>Password</label></div>
                 <div class="login-options">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input type="checkbox"> Remember me
-                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox"> Remember me</label>
                     <a href="#" onclick="forgotPassword()">Forgot Password?</a>
                 </div>
-                
                 <button type="submit" class="login-btn">Login</button>
             </form>
-            
-            <div class="register-link">
-                Don't have an account? <span onclick="switchForm('register')">Register</span>
-            </div>
+            <div class="register-link">Don't have an account? <span onclick="switchForm('register')">Register</span></div>
         </div>
 
         <div id="register-card" class="login-box fade-in" style="display: none;">
             <h2 class="login-title gradient-text uppercase tracking-widest">Reality Matrix</h2>
             <h3 class="login-subtitle text-xs text-slate-400 uppercase tracking-widest">Register Account</h3>
-            
             <form onsubmit="handleNewRegister(event)">
-                <div class="login-input-group">
-                    <input type="text" id="reg-user" required>
-                    <label>Username</label>
-                </div>
-                <div class="login-input-group">
-                    <input type="email" id="reg-email" required>
-                    <label>Email Address</label>
-                </div>
-                <div class="login-input-group">
-                    <input type="password" id="reg-pass" required>
-                    <label>Create Password</label>
-                </div>
+                <div class="login-input-group"><input type="text" id="reg-user" required><label>Username</label></div>
+                <div class="login-input-group"><input type="email" id="reg-email" required><label>Email Address</label></div>
+                <div class="login-input-group"><input type="password" id="reg-pass" required><label>Create Password</label></div>
                 <button type="submit" class="login-btn" style="background: var(--neon-blue); color: #000;">Create Account</button>
             </form>
-            
-            <div class="register-link">
-                Already have an account? <span onclick="switchForm('login')">Login Here</span>
-            </div>
+            <div class="register-link">Already have an account? <span onclick="switchForm('login')">Login Here</span></div>
         </div>
     </div>
 
     <div id="main-app" class="w-full h-full transition-all duration-1000" style="display: none;">
-        
         <aside class="w-[20rem] md:w-[24rem] glass-panel border-r border-slate-800 flex flex-col z-20 shrink-0">
             <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-black/40">
                 <h1 class="title-font text-xl font-bold gradient-text">Reality Matrix</h1>
             </div>
-            
             <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-2 custom-scroll" id="nav-modules"></nav>
-            
             <div class="p-4 border-t border-slate-800 space-y-3 bg-black/40">
                 <button onclick="AppCore.navigate('library')" class="btn-secondary w-full flex justify-center items-center gap-3">
                     <i class="fas fa-university text-[#00f3ff]"></i> <span id="ui-hub">Research Hub</span>
@@ -145,10 +148,8 @@
                     <button id="btn-back" onclick="AppCore.goBack()" class="hidden text-slate-400 hover:text-[#00f3ff] transition text-2xl"><i class="fas fa-arrow-left"></i></button>
                     <h2 id="header-title" class="text-lg font-bold text-white uppercase title-font tracking-widest">Dashboard</h2>
                 </div>
-                
                 <div class="flex items-center gap-5">
                     <button onclick="GuruRobot.startListening()" class="btn-icon shadow-neon"><i class="fas fa-microphone"></i></button>
-                    
                     <div class="relative">
                         <button onclick="AppCore.toggleLangMenu(event)" class="btn-lang flex items-center gap-2">
                             <i class="fas fa-globe text-[#00f3ff]"></i> <span id="current-lang-code">EN</span> <i class="fas fa-chevron-down text-xs"></i>
@@ -159,7 +160,6 @@
                     </div>
                 </div>
             </header>
-            
             <div class="flex-1 overflow-y-auto p-6 md:p-10 relative custom-scroll" id="content-area">
                 <div class="max-w-7xl mx-auto pb-40" id="dynamic-content"></div>
             </div>
@@ -206,78 +206,34 @@
             window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js'); });
         }
 
-        window.switchForm = function(formType) {
-            if(formType === 'register') {
-                document.getElementById('login-card').style.display = 'none';
-                document.getElementById('register-card').style.display = 'block';
-            } else {
-                document.getElementById('register-card').style.display = 'none';
-                document.getElementById('login-card').style.display = 'block';
-            }
+        window.switchForm = (type) => {
+            document.getElementById('login-card').style.display = type === 'register' ? 'none' : 'block';
+            document.getElementById('register-card').style.display = type === 'register' ? 'block' : 'none';
         }
 
-        window.forgotPassword = function() {
-            const email = prompt("Please enter your email address to reset password:");
-            if(email) {
-                alert("A password reset link has been sent to: " + email);
-            }
-        }
-
-        window.handleNewRegister = function(event) {
-            event.preventDefault();
+        window.handleNewRegister = (e) => {
+            e.preventDefault();
             const email = document.getElementById('reg-email').value;
             const pass = document.getElementById('reg-pass').value;
-
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then((userCredential) => {
-                    alert("Account Successfully Created! Welcome to the Matrix.");
-                    document.getElementById('reg-user').value = '';
-                    document.getElementById('reg-email').value = '';
-                    document.getElementById('reg-pass').value = '';
-                    window.switchForm('login');
-                })
-                .catch((error) => {
-                    alert("Error creating account: " + error.message);
-                });
+            createUserWithEmailAndPassword(auth, email, pass).then(() => {
+                alert("Welcome to the Matrix!");
+                window.switchForm('login');
+            }).catch(err => alert(err.message));
         }
 
-        window.handleNewLogin = function(event) {
-            event.preventDefault(); 
+        window.handleNewLogin = (e) => {
+            e.preventDefault();
             const email = document.getElementById('login-email').value;
             const pass = document.getElementById('login-password').value;
-            
-            if(email && pass) {
-                signInWithEmailAndPassword(auth, email, pass)
-                    .then((userCredential) => {
-                        const loginPage = document.getElementById('new-login-page');
-                        loginPage.style.opacity = '0';
-                        
-                        setTimeout(() => {
-                            loginPage.style.display = 'none';
-                            document.getElementById('main-app').style.display = 'flex';
-                            document.getElementById('guru-container').style.display = 'flex';
-                        }, 500);
-                    })
-                    .catch((error) => {
-                        alert("Login Failed! Please check your Email and Password.");
-                    });
-            }
+            signInWithEmailAndPassword(auth, email, pass).then(() => {
+                document.getElementById('new-login-page').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+                document.getElementById('guru-container').style.display = 'flex';
+            }).catch(() => alert("Login Failed!"));
         }
 
-        window.handleLogout = function() {
-            signOut(auth).then(() => {
-                document.getElementById('main-app').style.display = 'none';
-                document.getElementById('guru-container').style.display = 'none';
-                const loginPage = document.getElementById('new-login-page');
-                loginPage.style.display = 'flex';
-                setTimeout(() => {
-                    loginPage.style.opacity = '1';
-                }, 50);
-                document.getElementById('login-email').value = '';
-                document.getElementById('login-password').value = '';
-            }).catch((error) => {
-                alert("Error signing out: " + error.message);
-            });
+        window.handleLogout = () => {
+            signOut(auth).then(() => location.reload());
         }
     </script>
 </body>
