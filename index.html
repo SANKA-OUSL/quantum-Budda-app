@@ -31,12 +31,12 @@
             
             <form onsubmit="handleNewLogin(event)">
                 <div class="login-input-group">
-                    <input type="text" id="username" required>
-                    <label>Username</label>
+                    <input type="email" id="login-email" required>
+                    <label>Email Address</label>
                 </div>
                 
                 <div class="login-input-group">
-                    <input type="password" id="password" required>
+                    <input type="password" id="login-password" required>
                     <label>Password</label>
                 </div>
                 
@@ -150,13 +150,30 @@
     <script src="js/guru-robot.js"></script>
     <script src="js/app-core.js"></script>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+
+        // ඔයාගේ රහස් යතුරු
+        const firebaseConfig = {
+            apiKey: "AIzaSyA2IwwoTTiIeZS9pVUte_XQ4zyvivifg_c",
+            authDomain: "reality-matrix-8a563.firebaseapp.com",
+            projectId: "reality-matrix-8a563",
+            storageBucket: "reality-matrix-8a563.firebasestorage.app",
+            messagingSenderId: "829305936429",
+            appId: "1:829305936429:web:8ee2d5e525b6d564c036a4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Service Worker ලියාපදිංචිය
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js'); });
         }
 
-        // Login සහ Register කාඩ්පත් මාරු කිරීම
-        function switchForm(formType) {
+        // කාඩ්පත් මාරු කිරීම
+        window.switchForm = function(formType) {
             if(formType === 'register') {
                 document.getElementById('login-card').style.display = 'none';
                 document.getElementById('register-card').style.display = 'block';
@@ -166,58 +183,82 @@
             }
         }
 
-        // Forgot Password බොත්තම
-        function forgotPassword() {
+        // Forgot Password (දැනට UI එක)
+        window.forgotPassword = function() {
             const email = prompt("Please enter your email address to reset password:");
             if(email) {
                 alert("A password reset link has been sent to: " + email);
             }
         }
 
-        // Register වීම හැසිරවීම (දැනට Demo)
-        function handleNewRegister(event) {
+        // 1. Firebase හරහා අලුත් ගිණුමක් සෑදීම (Register)
+        window.handleNewRegister = function(event) {
             event.preventDefault();
-            alert("Account Successfully Created! Welcome to the Matrix.");
-            switchForm('login'); // හැදුවට පස්සේ ආයෙත් Login එකට යවනවා
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-pass').value;
+
+            // Firebase වෙත දත්ත යැවීම
+            createUserWithEmailAndPassword(auth, email, pass)
+                .then((userCredential) => {
+                    alert("Account Successfully Created! Welcome to the Matrix.");
+                    // පෝරමය හිස් කර Login පිටුවට යැවීම
+                    document.getElementById('reg-user').value = '';
+                    document.getElementById('reg-email').value = '';
+                    document.getElementById('reg-pass').value = '';
+                    window.switchForm('login');
+                })
+                .catch((error) => {
+                    // පාස්වර්ඩ් එක දුර්වල නම් හෝ ඊමේල් එක වැරදි නම් පණිවිඩයක් පෙන්වීම
+                    alert("Error creating account: " + error.message);
+                });
         }
 
-        // Login වීම හැසිරවීම
-        function handleNewLogin(event) {
+        // 2. Firebase හරහා ගිණුමට ඇතුළු වීම (Login)
+        window.handleNewLogin = function(event) {
             event.preventDefault(); 
-            const user = document.getElementById('username').value;
-            const pass = document.getElementById('password').value;
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-password').value;
             
-            if(user && pass) {
-                const loginPage = document.getElementById('new-login-page');
-                
-                loginPage.style.opacity = '0';
-                
-                setTimeout(() => {
-                    loginPage.style.display = 'none';
-                    document.getElementById('main-app').style.display = 'flex';
-                    document.getElementById('guru-container').style.display = 'flex';
-                }, 500);
+            if(email && pass) {
+                // Firebase හරහා පරීක්ෂා කිරීම
+                signInWithEmailAndPassword(auth, email, pass)
+                    .then((userCredential) => {
+                        // සාර්ථක නම් ඇප් එක ඇතුළට ගැනීම
+                        const loginPage = document.getElementById('new-login-page');
+                        loginPage.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            loginPage.style.display = 'none';
+                            document.getElementById('main-app').style.display = 'flex';
+                            document.getElementById('guru-container').style.display = 'flex';
+                        }, 500);
+                    })
+                    .catch((error) => {
+                        alert("Login Failed! Please check your Email and Password.");
+                    });
             }
         }
 
-        // ඩෑෂ්බෝඩ් එකෙන් Logout වීම
-        function handleLogout() {
-            // ඩෑෂ්බෝඩ් එක සඟවන්න
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('guru-container').style.display = 'none';
-            
-            // ලොගින් පිටුව ආයෙත් පෙන්වන්න
-            const loginPage = document.getElementById('new-login-page');
-            loginPage.style.display = 'flex';
-            
-            // Fade-in effect එකක් එක්ක පෙන්වන්න
-            setTimeout(() => {
-                loginPage.style.opacity = '1';
-            }, 50);
-            
-            // කලින් ගහපු පරණ පාස්වර්ඩ් මකා දමන්න
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
+        // 3. ඩෑෂ්බෝඩ් එකෙන් Logout වීම
+        window.handleLogout = function() {
+            signOut(auth).then(() => {
+                // Firebase එකෙන් සාර්ථකව අයින් වුණාට පස්සේ...
+                document.getElementById('main-app').style.display = 'none';
+                document.getElementById('guru-container').style.display = 'none';
+                
+                const loginPage = document.getElementById('new-login-page');
+                loginPage.style.display = 'flex';
+                
+                setTimeout(() => {
+                    loginPage.style.opacity = '1';
+                }, 50);
+                
+                // ෆෝම් හිස් කිරීම
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+            }).catch((error) => {
+                alert("Error signing out: " + error.message);
+            });
         }
     </script>
 </body>
