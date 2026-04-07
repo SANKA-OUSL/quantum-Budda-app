@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quantum Dhamma | The Ultimate Reality</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#02040a">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <link rel="stylesheet" href="css/main-styles.css">
+    <link rel="stylesheet" href="css/mystical-theme.css">
+</head>
+<body class="bg-theme overflow-hidden transition-colors duration-500">
+
+    <div id="new-login-page" class="new-login-full-screen">
+        <div class="animation-container-left">
+            <i class="fas fa-dharmachakra animated-dharma-wheel"></i>
+        </div>
+        <div class="animation-container-right">
+            <i class="fas fa-atom animated-einstein-atom"></i>
+        </div>
+
+        <div id="login-card" class="login-box fade-in">
+            <h2 class="login-title gradient-text uppercase tracking-widest">Reality Matrix</h2>
+            <h3 class="login-subtitle text-xs text-slate-400 uppercase tracking-widest">Login</h3>
+            
+            <form onsubmit="handleNewLogin(event)">
+                <div class="login-input-group">
+                    <input type="text" id="username" required>
+                    <label>Username</label>
+                </div>
+                
+                <div class="login-input-group">
+                    <input type="password" id="password" required>
+                    <label>Password</label>
+                </div>
+                
+                <div class="login-options">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" onclick="forgotPassword()">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+            
+            <div class="register-link">
+                Don't have an account? <span onclick="switchForm('register')">Register</span>
+            </div>
+        </div>
+
+        <div id="register-card" class="login-box fade-in" style="display: none;">
+            <h2 class="login-title gradient-text uppercase tracking-widest">Reality Matrix</h2>
+            <h3 class="login-subtitle text-xs text-slate-400 uppercase tracking-widest">Register Account</h3>
+            
+            <form onsubmit="handleNewRegister(event)">
+                <div class="login-input-group">
+                    <input type="text" id="reg-user" required>
+                    <label>Username</label>
+                </div>
+                <div class="login-input-group">
+                    <input type="email" id="reg-email" required>
+                    <label>Email Address</label>
+                </div>
+                <div class="login-input-group">
+                    <input type="password" id="reg-pass" required>
+                    <label>Create Password</label>
+                </div>
+                <button type="submit" class="login-btn" style="background: var(--neon-blue); color: #000;">Create Account</button>
+            </form>
+            
+            <div class="register-link">
+                Already have an account? <span onclick="switchForm('login')">Login Here</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-app" class="w-full h-full transition-all duration-1000" style="display: none;">
+        
+        <aside class="w-[20rem] md:w-[24rem] glass-panel border-r border-slate-800 flex flex-col z-20 shrink-0">
+            <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-black/40">
+                <h1 class="title-font text-xl font-bold gradient-text">Reality Matrix</h1>
+            </div>
+            
+            <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-2 custom-scroll" id="nav-modules"></nav>
+            
+            <div class="p-4 border-t border-slate-800 space-y-3 bg-black/40">
+                <button onclick="AppCore.navigate('library')" class="btn-secondary w-full flex justify-center items-center gap-3">
+                    <i class="fas fa-university text-[#00f3ff]"></i> <span id="ui-hub">Research Hub</span>
+                </button>
+                <button onclick="AppCore.navigate('settings')" class="btn-tertiary w-full flex justify-center items-center gap-3">
+                    <i class="fas fa-cog"></i> <span id="ui-settings">Settings</span>
+                </button>
+                <button onclick="handleLogout()" class="btn-secondary w-full flex justify-center items-center gap-3 mt-4" style="border-color: #ff0055; color: #ff0055;">
+                    <i class="fas fa-sign-out-alt"></i> <span>System Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 flex flex-col h-screen overflow-hidden z-10 relative">
+            <header class="h-20 glass-panel flex items-center justify-between px-8 border-b border-slate-800 shrink-0 z-50 bg-black/20">
+                <div class="flex items-center gap-4">
+                    <button id="btn-back" onclick="AppCore.goBack()" class="hidden text-slate-400 hover:text-[#00f3ff] transition text-2xl"><i class="fas fa-arrow-left"></i></button>
+                    <h2 id="header-title" class="text-lg font-bold text-white uppercase title-font tracking-widest">Dashboard</h2>
+                </div>
+                
+                <div class="flex items-center gap-5">
+                    <button onclick="GuruRobot.startListening()" class="btn-icon shadow-neon"><i class="fas fa-microphone"></i></button>
+                    
+                    <div class="relative">
+                        <button onclick="AppCore.toggleLangMenu(event)" class="btn-lang flex items-center gap-2">
+                            <i class="fas fa-globe text-[#00f3ff]"></i> <span id="current-lang-code">EN</span> <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="lang-dropdown" class="hidden absolute right-0 mt-3 w-48 max-h-80 overflow-y-auto bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-[100] custom-scroll">
+                            <ul class="flex flex-col text-sm text-slate-300" id="lang-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="flex-1 overflow-y-auto p-6 md:p-10 relative custom-scroll" id="content-area">
+                <div class="max-w-7xl mx-auto pb-40" id="dynamic-content"></div>
+            </div>
+        </main>
+    </div>
+
+    <div id="guru-container" class="fixed bottom-8 right-8 z-[100] flex-col items-end" style="display: none;">
+        <div id="guru-chat-window" class="hidden mb-4 glass-panel p-0 rounded-2xl rounded-br-none border border-[#00f3ff]/50 shadow-neon w-[400px]">
+            <div class="bg-black/90 p-4 flex justify-between items-center border-b border-slate-700">
+                <h5 class="font-bold text-white text-sm uppercase tracking-widest"><i class="fas fa-robot text-[#b026ff] mr-2"></i> The Guru AI</h5>
+                <button onclick="GuruRobot.toggleChat()" class="text-slate-400 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="guru-history" class="h-80 overflow-y-auto p-4 space-y-4 bg-slate-900/80 text-sm custom-scroll"></div>
+            <div class="p-3 bg-black/90 border-t border-slate-700 flex items-center gap-3">
+                <input type="text" id="guru-input" placeholder="Command or Ask..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-white text-sm focus:outline-none focus:border-[#00f3ff]" onkeypress="if(event.key==='Enter') GuruRobot.processInput()">
+                <button onclick="GuruRobot.processInput()" class="btn-icon text-[#00f3ff] hover:border-[#00f3ff]"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        <button onclick="GuruRobot.toggleChat()" class="w-16 h-16 rounded-full bg-gradient-to-tr from-indigo-900 to-black flex items-center justify-center text-2xl border border-[#00f3ff] hover:scale-110 shadow-neon z-[100] transition-transform guru-float">🤖</button>
+    </div>
+
+    <script src="js/buddhist-philosophy.js"></script>
+    <script src="js/quantum-simulators.js"></script>
+    <script src="js/guru-robot.js"></script>
+    <script src="js/app-core.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js'); });
+        }
+
+        // Login සහ Register කාඩ්පත් මාරු කිරීම
+        function switchForm(formType) {
+            if(formType === 'register') {
+                document.getElementById('login-card').style.display = 'none';
+                document.getElementById('register-card').style.display = 'block';
+            } else {
+                document.getElementById('register-card').style.display = 'none';
+                document.getElementById('login-card').style.display = 'block';
+            }
+        }
+
+        // Forgot Password බොත්තම
+        function forgotPassword() {
+            const email = prompt("Please enter your email address to reset password:");
+            if(email) {
+                alert("A password reset link has been sent to: " + email);
+            }
+        }
+
+        // Register වීම හැසිරවීම (දැනට Demo)
+        function handleNewRegister(event) {
+            event.preventDefault();
+            alert("Account Successfully Created! Welcome to the Matrix.");
+            switchForm('login'); // හැදුවට පස්සේ ආයෙත් Login එකට යවනවා
+        }
+
+        // Login වීම හැසිරවීම
+        function handleNewLogin(event) {
+            event.preventDefault(); 
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if(user && pass) {
+                const loginPage = document.getElementById('new-login-page');
+                
+                loginPage.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loginPage.style.display = 'none';
+                    document.getElementById('main-app').style.display = 'flex';
+                    document.getElementById('guru-container').style.display = 'flex';
+                }, 500);
+            }
+        }
+
+        // ඩෑෂ්බෝඩ් එකෙන් Logout වීම
+        function handleLogout() {
+            // ඩෑෂ්බෝඩ් එක සඟවන්න
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('guru-container').style.display = 'none';
+            
+            // ලොගින් පිටුව ආයෙත් පෙන්වන්න
+            const loginPage = document.getElementById('new-login-page');
+            loginPage.style.display = 'flex';
+            
+            // Fade-in effect එකක් එක්ක පෙන්වන්න
+            setTimeout(() => {
+                loginPage.style.opacity = '1';
+            }, 50);
+            
+            // කලින් ගහපු පරණ පාස්වර්ඩ් මකා දමන්න
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+    </script>
+</body>
+</html>

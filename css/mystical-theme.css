@@ -1,0 +1,58 @@
+/* css/mystical-theme.css */
+
+/* Cosmic Deep Space Background */
+.mystical-bg {
+    background: radial-gradient(circle at center, #070b14 0%, #000000 100%);
+    position: relative; overflow: hidden;
+}
+.mystical-bg::before {
+    content: ''; position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw;
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.05) 0%, transparent 70%);
+    filter: blur(60px); pointer-events: none; animation: pulseGlow 10s infinite alternate;
+}
+.mystical-bg::after {
+    content: ''; position: absolute; bottom: -10%; right: -10%; width: 50vw; height: 50vw;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.05) 0%, transparent 70%);
+    filter: blur(60px); pointer-events: none; animation: pulseGlow 15s infinite alternate-reverse;
+}
+
+@keyframes pulseGlow { 0% { opacity: 0.5; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1.2); } }
+
+/* Mystical Shadows */
+.shadow-neon { box-shadow: 0 0 50px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.8); border-top: 1px solid rgba(0, 243, 255, 0.3); }
+
+/* Guru AI Robot Float Animation */
+.guru-float { animation: floatGuru 4s ease-in-out infinite; }
+@keyframes floatGuru { 0%, 100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-12px) scale(1.05); } }
+
+/* PhET Simulator Frame & Controls */
+.sim-canvas-container {
+    border-radius: 16px;
+    background: #000;
+    box-shadow: inset 0 0 60px rgba(0,0,0,1), 0 10px 30px rgba(0,243,255,0.05);
+    border: 1px solid #1e293b;
+    position: relative;
+    overflow: hidden;
+}
+
+.phet-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #1e293b; outline: none; transition: opacity 0.2s; cursor: pointer; }
+.phet-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #00f3ff; cursor: pointer; box-shadow: 0 0 15px #00f3ff; transition: transform 0.1s; }
+.phet-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+/* Dashboard Floating Elements (Hidden City Style) */
+.floating-element {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.15;
+    z-index: 0;
+}
+.float-slow { animation: floatRandom 20s infinite linear alternate; }
+.float-med { animation: floatRandom 15s infinite linear alternate-reverse; }
+.spin-slow { animation: spin 25s infinite linear; }
+
+@keyframes floatRandom {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    33% { transform: translate(30px, -50px) rotate(10deg) scale(1.1); }
+    66% { transform: translate(-20px, 40px) rotate(-5deg) scale(0.9); }
+    100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
